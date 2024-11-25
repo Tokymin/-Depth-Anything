@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 from depth_anything.dpt import DepthAnything
 from depth_anything.util.transform import Resize, NormalizeImage, PrepareForNet
+from config.config_test import hyperparameters as param
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -54,7 +55,6 @@ if __name__ == '__main__':
     total_params = sum(param.numel() for param in depth_anything.parameters())
     print('Total parameters: {:.2f}M'.format(total_params / 1e6))
 
-
     total_params = sum(param.numel() for param in depth_anything.parameters())
     print('Total parameters: {:.2f}M'.format(total_params / 1e6))
 
@@ -81,8 +81,9 @@ if __name__ == '__main__':
     else:
         filenames = os.listdir(args.img_path)
         filenames = [os.path.join(args.img_path, filename) for filename in filenames if not filename.startswith('.')]
-        filenames.sort()
-
+        start = param["start"]
+        num_images_to_load = param["num_images_to_load"]  # Example number, change as needed
+        filenames = sorted(filenames)[start:num_images_to_load]
     os.makedirs(args.outdir, exist_ok=True)
 
     for filename in tqdm(filenames):
@@ -113,8 +114,9 @@ if __name__ == '__main__':
             cv2.imwrite(os.path.join(args.outdir, filename[:filename.rfind('.')] + '_depth.png'), depth)
         else:
             split_region = np.ones((raw_image.shape[0], margin_width, 3), dtype=np.uint8) * 255
+            output_folder = param["pred_depth_img_path"] + param["model_name"]+ "/"
+            cv2.imwrite(os.path.join(output_folder, filename[:filename.rfind('.')] + '_depth.png'), depth)
             combined_results = cv2.hconcat([raw_image, split_region, depth])
-
             caption_space = np.ones((caption_height, combined_results.shape[1], 3), dtype=np.uint8) * 255
             captions = ['Raw image', 'Depth Anything']
             segment_width = w + margin_width
@@ -130,5 +132,6 @@ if __name__ == '__main__':
                 cv2.putText(caption_space, caption, (text_x, 40), font, font_scale, (0, 0, 0), font_thickness)
 
             final_result = cv2.vconcat([caption_space, combined_results])
+            vis_folder = param["vis_path"] + param["model_name"] + "/"
 
-            cv2.imwrite(os.path.join(args.outdir, filename[:filename.rfind('.')] + '_img_depth.png'), final_result)
+            cv2.imwrite(os.path.join(vis_folder, filename[:filename.rfind('.')] + '_img_depth.png'), final_result)

@@ -7,7 +7,9 @@ assets
 # C extensions
 *.so
 outputs
-
+Saved_visulaization
+Saved_depth_data
+Saved_metrics_data
 # Distribution / packaging
 .Python
 build/
