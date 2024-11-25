@@ -124,6 +124,7 @@ def run_script(tgt_img_folder, output_dir, num_images_to_load):
     import subprocess
     """python run.py --encoder  vitl --img-path /mnt/share/toky/Projects/dmp/test_Images --outdir outputs"""
     # 配置参数
+    device=param['CUDA']
     inference_script = "run.py"  # py 的路径
     encoder = "vitl"  # 检查点路径
     input_rgb_dir = tgt_img_folder

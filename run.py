@@ -11,6 +11,7 @@ from depth_anything.dpt import DepthAnything
 from depth_anything.util.transform import Resize, NormalizeImage, PrepareForNet
 from config.config_test import hyperparameters as param
 
+os.environ["CUDA_VISIBLE_DEVICES"] = param["CUDA"]
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--img-path', type=str)
@@ -35,9 +36,6 @@ if __name__ == '__main__':
     # depth_anything.load_state_dict(torch.load(model_file, map_location=DEVICE))
     # depth_anything = depth_anything.to(DEVICE).eval()
     # depth_anything = DepthAnything.from_pretrained('/mnt/share/toky/LLMs/Depth-Anything').to(DEVICE).eval()
-
-    DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-
     # Load model from pth
     import json
 
@@ -114,7 +112,7 @@ if __name__ == '__main__':
             cv2.imwrite(os.path.join(args.outdir, filename[:filename.rfind('.')] + '_depth.png'), depth)
         else:
             split_region = np.ones((raw_image.shape[0], margin_width, 3), dtype=np.uint8) * 255
-            output_folder = param["pred_depth_img_path"] + param["model_name"]+ "/"
+            output_folder = param["pred_depth_img_path"] + param["model_name"] + "/"
             cv2.imwrite(os.path.join(output_folder, filename[:filename.rfind('.')] + '_depth.png'), depth)
             combined_results = cv2.hconcat([raw_image, split_region, depth])
             caption_space = np.ones((caption_height, combined_results.shape[1], 3), dtype=np.uint8) * 255
