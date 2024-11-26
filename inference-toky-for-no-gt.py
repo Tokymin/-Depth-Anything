@@ -13,8 +13,7 @@ import os
 from config.config_test_for_clinical_dataset import hyperparameters as param
 import scipy.stats as stats
 from skimage.metrics import structural_similarity as ssim
-from skimage.feature import canny
-from scipy.spatial.distance import jensenshannon
+
 
 
 # 定义计算SSIM的函数
@@ -87,6 +86,8 @@ def load_image_color(file_path):
 
 
 def load_matched_images(tgt_folder, pred_folder, start, num_images, prefix):
+
+
     """Load images based on filenames in the tgt_folder."""
     tgt_files = sorted([f for f in os.listdir(tgt_folder) if f.endswith(".png")])[start:num_images]
     ssim_scores = []
@@ -143,6 +144,7 @@ def load_matched_images(tgt_folder, pred_folder, start, num_images, prefix):
         }
 
     df = pd.DataFrame(data)
+    os.makedirs(save_metric_file_path, exist_ok=True)
     save_path = os.path.join(save_metric_file_path, f'{param["model_name"]}.xlsx')
     df.to_excel(save_path, index=False)
 
@@ -233,7 +235,8 @@ if __name__ == '__main__':
     output_folder = param["pred_depth_img_path"] + param["model_name"]
     vis_folder = param["vis_path"] + param["model_name"] + "/"
     # step2: 运行脚本
-    run_script(input_folder, output_folder, num_images_to_load)
+    if param['is_run_script']:
+        run_script(input_folder, output_folder, num_images_to_load)
     # step3: 调用匹配函数找到GT、Compute metrics
     if param['is_save_metric']:
         tgt_images, pred_images = load_matched_images(input_folder, output_folder, start, num_images_to_load, prefix)

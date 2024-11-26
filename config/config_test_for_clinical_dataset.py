@@ -1,7 +1,8 @@
 # 定义超参数
 hyperparameters = {
+    'is_run_script': True,
     'start': 0,
-    'num_images_to_load': 2,  # Example number, change as needed
+    'num_images_to_load': 300,  # Example number, change as needed
     'is_visualize': True,
     'prefix': "_depth",  # 深度图存的前缀/后缀，例如depth_aov_
     'pred_folder': 'Saved_Depth',
@@ -14,7 +15,7 @@ hyperparameters = {
     'is_save_metric': True,
     # -----------数据集相关参数-----------
     'input_folder': '/mnt/share/toky/Datasets/EndoDepth-Diffusion/EndoMapper-Clinical-Seq/eval/',
-    # [''/mnt/share/toky/Datasets/EndoDepth-Diffusion/EndoSlam-Phantom/eval/'',
+    # ['/mnt/share/toky/Datasets/EndoDepth-Diffusion/EndoSlam-Phantom/eval/',
     # '/mnt/share/toky/Datasets/EndoDepth-Diffusion/EndoMapper-Clinical-Seq/eval/',
     # '/mnt/share/toky/Datasets/ControlNet_Dataset/test2171/dpt_predictit_depth/',
     # '/mnt/share/toky/Datasets/SERV-Depth/rgb/',
