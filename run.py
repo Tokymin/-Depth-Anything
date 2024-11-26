@@ -9,7 +9,8 @@ from tqdm import tqdm
 
 from depth_anything.dpt import DepthAnything
 from depth_anything.util.transform import Resize, NormalizeImage, PrepareForNet
-from config.config_test import hyperparameters as param
+# from config.config_test import hyperparameters as param
+from config.config_test_for_clinical_dataset import hyperparameters as param
 
 os.environ["CUDA_VISIBLE_DEVICES"] = param["CUDA"]
 if __name__ == '__main__':
